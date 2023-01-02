@@ -173,4 +173,50 @@ for (i in 1:25){ ###i son filas
 }
 
 
+###############################################
+### L O O P   E N T R E   0.001   Y   0.999 ###
+###############################################
 
+### NOTA: Este es el loop con el ifelse que 
+### limita los valores a un rango entre 0.001 y 0.999
+
+
+for (i in 1:25){ ###i son filas
+  
+  j<-1
+  
+  for (j in 1:12){
+    xit <- ksim_evaluar[i,j] # Estado de la variable a evaluar en iteracion i
+    
+    alfa <- as.vector(input_alfa[j,]) #Estos tienen que cambiar por fila
+    beta <- as.vector(input_beta[j,]) #Estos tienen que cambiar pr fila
+    
+    
+    alfaiter<- alfa
+    betaiter <- beta
+    
+    
+    if (i==1) { # The condition must return TRUE or FALSE
+      ksimini <-  as.vector(ksim_evaluar[i,])
+      dksimini<- rep(0,12)
+      dksim_evaluar[i+1,j] <- func_dxit(xit, ksimini, alfaiter, betaiter,dksimini, dt)
+      ksim_evaluar[i+1,j]  <-  ksim_evaluar[i,j]+dksim_evaluar[i+1,j]
+      
+      if(ksim_evaluar[i+1,j] <= 0.001){ #ifelse para limitar el valor mínimo a 0.001
+        ksim_evaluar[i+1,j] <- 0.001
+      } else {ksim_evaluar[i+1,j]
+      }
+      
+      if(ksim_evaluar[i+1,j] >= 0.999){ #ifelse para limitar el valor máximo a 0.999
+        ksim_evaluar[i+1,j] <- 0.999
+      } else {ksim_evaluar[i+1,j]
+      }
+      
+    } else {
+      dksim_evaluar[i+1,j] <- func_dxit(xit, ksim_evaluar[i,], alfaiter, betaiter, dksim_evaluar[i,], dt)
+      ksim_evaluar[i+1,j]  <-  ksim_evaluar[i,j]+dksim_evaluar[i+1,j]
+      
+    }
+  }
+}
+  
